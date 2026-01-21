@@ -1,0 +1,122 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stock-analysis"
+version = "1.0.0"
+description = "Research-grade stock analysis system with ML-powered scoring"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Stock Analysis Team"}
+]
+keywords = ["stock", "analysis", "trading", "quantitative", "finance", "ml"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+dependencies = [
+    # Data handling
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "polars>=0.20.0",
+    "pyarrow>=14.0.0",
+    "lxml>=5.0.0",
+
+    # Database
+    "duckdb>=0.9.0",
+    "sqlalchemy>=2.0.0",
+
+    # Data sources
+    "yfinance>=0.2.30",
+    "requests>=2.31.0",
+
+    # Technical analysis
+    "scipy>=1.10.0",
+
+    # Machine learning
+    "scikit-learn>=1.3.0",
+    "lightgbm>=4.0.0",
+    "xgboost>=2.0.0",
+
+    # CLI
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+
+    # Configuration
+    "pyyaml>=6.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+
+    # Utilities
+    "joblib>=1.3.0",
+    "tqdm>=4.66.0",
+    "python-dateutil>=2.8.0",
+
+    # GUI
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.4.0",
+]
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.23.0",
+]
+
+[project.scripts]
+stock-analysis = "stock_analysis.cli.main:main"
+sa = "stock_analysis.cli.main:main"
+stock-gui = "stock_analysis.gui.run:main"
+
+[project.urls]
+Homepage = "https://github.com/stock-analysis/stock-analysis"
+Documentation = "https://stock-analysis.readthedocs.io"
+Repository = "https://github.com/stock-analysis/stock-analysis"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+stock_analysis = ["py.typed", "config/*.yaml"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+ignore = ["E501"]
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=stock_analysis --cov-report=term-missing"
