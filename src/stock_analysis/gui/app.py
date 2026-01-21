@@ -10,15 +10,12 @@ A comprehensive stock analysis dashboard with:
 - Portfolio comparison
 """
 
-# Fix Python path for Railway deployment
+# Fix Python path for Railway deployment - MUST BE FIRST
 import sys
-import os
 from pathlib import Path
-
-# Add src directory to path
-app_dir = Path(__file__).resolve().parent.parent.parent
-if str(app_dir) not in sys.path:
-    sys.path.insert(0, str(app_dir))
+_app_dir = Path(__file__).resolve().parent.parent.parent
+if str(_app_dir) not in sys.path:
+    sys.path.insert(0, str(_app_dir))
 
 import streamlit as st
 import pandas as pd
@@ -27,6 +24,11 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime, timedelta
 import warnings
+
+# Import stock_analysis modules at top level (after path fix)
+from stock_analysis.data.provider import DataProvider
+from stock_analysis.scoring.scorer import StockScorer
+from stock_analysis.indicators.engine import IndicatorEngine
 
 warnings.filterwarnings("ignore")
 
@@ -273,8 +275,6 @@ st.markdown("""
 @st.cache_data(ttl=3600)
 def load_stock_data(symbol: str):
     """Load stock data with caching."""
-    from stock_analysis.data.provider import DataProvider
-
     provider = DataProvider()
     try:
         price_data = provider.get_prices(symbol)
@@ -287,8 +287,6 @@ def load_stock_data(symbol: str):
 @st.cache_data(ttl=3600)
 def compute_analysis(symbol: str, prices_json: str, benchmark_json: str | None):
     """Compute stock analysis with caching."""
-    from stock_analysis.scoring.scorer import StockScorer
-
     prices = pd.read_json(prices_json)
     benchmark = pd.read_json(benchmark_json) if benchmark_json else None
 
@@ -299,8 +297,6 @@ def compute_analysis(symbol: str, prices_json: str, benchmark_json: str | None):
 @st.cache_data(ttl=3600)
 def compute_indicators(prices_json: str):
     """Compute all indicators with caching."""
-    from stock_analysis.indicators.engine import IndicatorEngine
-
     prices = pd.read_json(prices_json)
     engine = IndicatorEngine()
     return engine.compute_all(prices)
