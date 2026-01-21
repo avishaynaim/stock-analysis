@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["python312"]
-
-[phases.install]
-cmds = ["pip install -r requirements.txt", "pip install -e ."]
-
-[start]
-cmd = "streamlit run src/stock_analysis/gui/app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true"
