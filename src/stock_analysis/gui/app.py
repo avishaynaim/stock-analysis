@@ -10,6 +10,16 @@ A comprehensive stock analysis dashboard with:
 - Portfolio comparison
 """
 
+# Fix Python path for Railway deployment
+import sys
+import os
+from pathlib import Path
+
+# Add src directory to path
+app_dir = Path(__file__).resolve().parent.parent.parent
+if str(app_dir) not in sys.path:
+    sys.path.insert(0, str(app_dir))
+
 import streamlit as st
 import pandas as pd
 import numpy as np
